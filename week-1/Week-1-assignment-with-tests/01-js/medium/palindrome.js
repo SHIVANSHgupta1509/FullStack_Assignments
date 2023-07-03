@@ -7,7 +7,30 @@
 */
 
 function isPalindrome(str) {
-  return true;
-}
 
-module.exports = isPalindrome;
+  str=str.toLowerCase();
+  str=help(str);
+  let ptr1=0;let ptr2=str.length-1;
+  while(ptr1<=ptr2){
+    let c1=str.charAt(ptr1);
+    let c2=str.charAt(ptr2);
+    if(c1!=c2)return false;
+    ptr1++;ptr2--;
+  }
+  return true;
+ }
+ 
+ function help(str){
+ 
+   let res="";
+ 
+   for(let i=0;i<str.length;i++){
+     let c1=str.charAt(i);
+     if(c1==' ' || c1=='?' || c1=='!' || c1=='.' || c1==','){}
+     else res+=c1;
+   }
+   return res;
+ }
+ 
+ module.exports = isPalindrome;
+ 
