@@ -30,8 +30,72 @@
  */
 
 const express = require("express")
+const bodyParser=require("body-parser");
 const PORT = 3000;
 const app = express();
 // write your logic here, DONT WRITE app.listen(3000) when you're running tests, the tests will automatically start the server
+
+let users=[];
+app.use(bodyParser.json());
+app.post("http://localhost:3000/signup",(req,res)=>{
+       let jsonBody=req.body;
+       let username=jsonBody.username;
+       if(userExists(username))res.status(400).send("Bad Request");
+       else{
+       users.push(jsonBody)
+       res.status(201).send("Signup successful");
+}});
+
+app.post("http://localhost:3000/login",(req,res)=>{
+     let jsonBody=req.body;
+     let username=jsonBody.username;
+     if(!userExists(username)){
+      res.status(401).send("Unauthorized")
+     }
+     else{
+      let arr=[];
+      for(let i=0;i<users.length;i++){
+        if(users[i].username==username)arr.push({
+          "firstName": "user[i].firstName",
+          "lastName": "user[i].lastName",
+          "email": "user[i].email"
+        }
+        );
+      }
+      res.status(200).send(arr);
+     }
+})
+
+app.get("http://localhost:3000/data",(req,res)=>{
+     let username=req.headers.username;
+     let password=req.headers.password;
+     
+     let arr=[];
+     if(userCred(username,password)){
+       for(let i=0;i<users.length;i++){
+           arr.push(users[i]);
+       }
+       res.status("200").send(arr);
+     }
+     else{
+      res.status(401).send("Unauthorized");
+     }
+
+})
+
+function userExists(username){
+  for(let i=0;i<users.length;i++){
+    if(users[i].username==username)return true;
+  }
+  return false;
+}
+
+function userCred(username,password){
+       for(let i=0;i<users.length;i++){
+        if(users[i].username==username && users[i].password==password)return true;
+       }
+       return false;
+}
+
 
 module.exports = app;
